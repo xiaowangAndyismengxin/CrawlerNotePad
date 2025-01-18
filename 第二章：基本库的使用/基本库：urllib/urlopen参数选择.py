@@ -1,7 +1,6 @@
 import urllib.request
 import urllib.parse
 import urllib.error
-import ssl
 import socket  # 一个库，可以实现TCP/UDP/IP等协议的底层操作
 
 
