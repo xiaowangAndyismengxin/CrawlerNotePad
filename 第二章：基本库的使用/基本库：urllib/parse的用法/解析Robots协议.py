@@ -1,3 +1,4 @@
+from time import sleep
 from urllib.robotparser import RobotFileParser
 from urllib.request import urlopen
 
@@ -7,10 +8,11 @@ rp = RobotFileParser(url='https://www.example.com')
 print(rp.mtime())
 rp.set_url(url)
 print(rp.mtime())
-rp.parse(lines=(resp := urlopen(url)).read().decode("utf-8").split('\n'))  # 可迭代对象
+rp.parse(lines=[])  # 可迭代对象
 print(rp.mtime())
+sleep(3)
 print(rp.mtime())
-rp.read()
+# rp.read()
 print(rp.mtime())
 print(rp.can_fetch('Baiduspider', 'https://www.baidu.com'))
 print(rp.can_fetch('Baiduspider', 'https://www.baidu.com/homepage/'))
