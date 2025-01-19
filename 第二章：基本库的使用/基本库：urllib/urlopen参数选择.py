@@ -18,6 +18,8 @@ import socket  # 一个库，可以实现TCP/UDP/IP等协议的底层操作
 data = bytes(urllib.parse.urlencode({'name': 'germey'}), encoding="utf-8")
 try:
     response = urllib.request.urlopen(url="https://www.httpbin.org/post", data=data, timeout=60)
+except TimeoutError as e:
+    print(e.args)
 except urllib.error.URLError as e:
     print(e.reason)
     print(isinstance(e.reason, socket.timeout))
