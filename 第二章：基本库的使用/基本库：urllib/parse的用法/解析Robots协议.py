@@ -12,6 +12,7 @@ rp.parse(lines=[])  # 可迭代对象
 print(rp.mtime())
 sleep(3)
 print(rp.mtime())
+# 如果用parse导就不用read(), 不建议rp同时存在url和parse。
 # rp.read()
 print(rp.mtime())
 print(rp.can_fetch('Baiduspider', 'https://www.baidu.com'))
