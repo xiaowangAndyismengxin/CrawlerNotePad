@@ -6,7 +6,7 @@ headers = {
 }
 
 url = "https://ts4.cn.mm.bing.net/th?id=ODLS.1e67f861-d980-4c01-ba66-9450f90172f4&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid="
-response = requests.get(url)
+response = requests.get(url, headers=headers)
 
 headers = response.headers  # <class 'requests.structures.CaseInsensitiveDict'>
 assert headers['Content-Type'].split('/')[0] == 'image'
