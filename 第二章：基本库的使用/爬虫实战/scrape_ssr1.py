@@ -13,7 +13,7 @@ VERITY: bool = False
 
 
 class SSR1Crawler:
-    def get_name_and_detail_page_url(self) -> list:
+    def get_detail_page_url(self) -> list:
         page: int = 1
         url_pattern: re.Pattern[str] = re.compile(r'<a [^>]*?href="([^"]*?)"[^>]*?class="name">')
         url_list: list = list()
@@ -34,7 +34,7 @@ class SSR1Crawler:
 
     def parse_detail(self, url_list: list | None = None) -> dict[str: dict[str: str | float | None]]:
         if url_list is None:
-            url_list: list[str] = self.get_name_and_detail_page_url()
+            url_list: list[str] = self.get_detail_page_url()
 
         parse_dict: dict[str: dict[str: str | float | None]] = dict()
 
@@ -120,3 +120,4 @@ class SSR1Crawler:
 
 
 crawler = SSR1Crawler()
+print(crawler.parse_detail())
