@@ -3,7 +3,8 @@ import logging
 
 
 logging.captureWarnings(True)
-# 编辑器可能会报错，但的确可以，因为存在于__init__.py中
 requests.urllib3.disable_warnings()
 url = "https://ssr2.scrape.center"
-# ???
+resp = requests.get(url, verify=False)
+print(resp.status_code)
+print(resp.text[:50], '...')

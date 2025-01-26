@@ -1,7 +1,7 @@
 import urllib.request
 
 
-response = urllib.request.urlopen("https://ssr1.scrape.center/")
+response = urllib.request.urlopen("https://www.httpbin.org/get")
 print(type(response))
 print(response.msg)  # str
 print(response.code)  # int

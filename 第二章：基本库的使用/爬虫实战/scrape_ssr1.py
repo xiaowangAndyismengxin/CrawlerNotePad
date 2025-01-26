@@ -2,6 +2,7 @@ import requests
 import re
 import logging
 from urllib.parse import urljoin
+import json
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,7 +41,8 @@ class SSR1Crawler:
 
         cover_pattern: re.Pattern[str] = re.compile(r'<img[^>]*?src="([^"]*)"[^>]*?class="cover"')
         name_pattern: re.Pattern[str] = re.compile(r'<h2[^>]*?class="m-b-sm">(.*?)</h2>', re.S)
-        categories_pattern: re.Pattern[str] = re.compile(r'<button[^>]*?category.*?<span>(.*?)</span>.*?</button>', re.S)
+        categories_pattern: re.Pattern[str] = re.compile(r'<button[^>]*?category.*?<span>(.*?)</span>.*?</button>',
+                                                         re.S)
         published_at_pattern: re.Pattern[str] = re.compile(r'(\d{4})-(\d{2})-(\d{2})\s*?上映')
         drama_pattern: re.Pattern[str] = re.compile(r'剧情简介</h3>.*?<p.*?>(.*?)</p>', re.S)
         score_pattern: re.Pattern[str] = re.compile(r'<p[^>]*?class="score[^"]*">(.*?)</p>', re.S)
@@ -53,21 +55,21 @@ class SSR1Crawler:
                 continue
             text = resp.text
             try:
-                cover = re.search(cover_pattern, text).group(1)
+                cover = re.search(cover_pattern, text).group(1).strip('\n \t')
             except AttributeError:
                 cover = None
             except TypeError:
                 cover = None
 
             try:
-                name = re.search(name_pattern, text).group(1)
+                name = re.search(name_pattern, text).group(1).strip('\n \t')
             except AttributeError:
                 name = None
             except TypeError:
                 name = None
 
             try:
-                categories = re.findall(categories_pattern, text)
+                categories = [c.strip('\n \t') for c in re.findall(categories_pattern, text)]
             except AttributeError:
                 categories = None
             except TypeError:
@@ -76,9 +78,9 @@ class SSR1Crawler:
             try:
                 pa_res = re.search(published_at_pattern, text)
                 published_at = {
-                    'month': pa_res.group(2),
-                    'day': pa_res.group(3),
-                    'year': pa_res.group(1)
+                    'month': int(pa_res.group(2).strip('\n \t')),
+                    'day': int(pa_res.group(3).strip('\n \t')),
+                    'year': int(pa_res.group(1).strip('\n \t'))
                 }
             except AttributeError:
                 published_at = {
@@ -94,14 +96,14 @@ class SSR1Crawler:
                 }
 
             try:
-                drama = re.search(drama_pattern, text).group(1)
+                drama = re.search(drama_pattern, text).group(1).strip('\n \t')
             except AttributeError:
                 drama = None
             except TypeError:
                 drama = None
 
             try:
-                score = float(re.search(score_pattern, text).group(1))
+                score = float(re.search(score_pattern, text).group(1).strip('\n \t'))
             except AttributeError:
                 score = None
             except TypeError:
@@ -118,6 +120,13 @@ class SSR1Crawler:
             logging.info(f'Parsed {url}')
         return parse_dict
 
+    def save_data(self, film_dict: dict | None = None,
+                  file_name: str = 'ssr1_data.json') -> None:
+        if film_dict is None:
+            film_dict = self.parse_detail()
+        with open(file_name, 'w', encoding='utf-8') as f:
+            json.dump(film_dict, f, ensure_ascii=False, indent=2)
+
 
 crawler = SSR1Crawler()
-print(crawler.parse_detail())
+print(crawler.save_data())
