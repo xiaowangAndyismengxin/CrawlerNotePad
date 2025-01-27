@@ -2,17 +2,17 @@ from lxml import etree
 
 
 html = etree.parse('./example_web.html', etree.HTMLParser())
-# /: 直接子节点 //: 子孙节点
+# /: 直接子节点 //: 子孙节点 .: 当前位置
 result = html.xpath('//*')
 # result = html.xpath('//ul/li')
 
-# 子节点，父节点
+# 父节点
 # result = html.xpath('//li/..')
 # result = html.xpath('//li/parent::*')
 # result = html.xpath('//li/parent::ol')
 
 # 匹配
-# result = html.xpath('//li[@class="tto"]')
+# result = html.xpath('//li[@class="tto"]/text()')
 # result = html.xpath('//h1[contains(@class, "page_title")]')
 # result = html.xpath('//h1[name()="h1"]')
 
@@ -35,13 +35,13 @@ result = html.xpath('//*')
 # result = html.xpath('//ul/li[last()-1]/text()')
 
 # 节点轴选择方法
-#  :: + 元素名 + (条件)
-# result = html.xpath('//ul/li[1]/ancestor::*')  # 从老到小
-# result = html.xpath('//h1//attribute::href')
+#  :: + 选择对象名 + (条件)
+# result = html.xpath('//ul/li[1]/ancestor::*')  # 祖先, 从老到小
+# result = html.xpath('//h1//attribute::href')  # 所有的属性
 # result = html.xpath('//ul/child::*[contains(@class, "tto") or contains(@class, "tes") or contains(@class, "tst")]')
-# result = html.xpath('//div[@class = "toppings"]/descendant::*')  # 由上至下
+# result = html.xpath('//div[@class = "toppings"]/descendant::*')  # 子孙节点, 由上至下
 # result = html.xpath('//ol/following::*')  # 当前节点以后的所有节点, 由上至下
-# result = html.xpath('//ol/following-sibling::*/@class')
+# result = html.xpath('//ol/following-sibling::*/@class')  # 当前节点以后的所有同级节点, 由上至下
 
 
 print(result)
