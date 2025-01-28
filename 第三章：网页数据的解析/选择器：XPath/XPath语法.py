@@ -1,7 +1,7 @@
 from lxml import etree
 
 
-html = etree.parse('./example_web.html', etree.HTMLParser())
+html = etree.parse('../example_web.html', etree.HTMLParser())
 # /: 直接子节点 //: 子孙节点 .: 当前位置
 result = html.xpath('//*')
 # result = html.xpath('//ul/li')
