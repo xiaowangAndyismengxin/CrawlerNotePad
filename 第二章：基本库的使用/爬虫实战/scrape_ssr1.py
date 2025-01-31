@@ -1,5 +1,5 @@
 from crawlers import SSR1Crawler
 
 
-crawler = SSR1Crawler(False, True)
+crawler = SSR1Crawler()
 crawler.save_data()

@@ -17,7 +17,7 @@ result = html.xpath('//*')
 # result = html.xpath('//h1[name()="h1"]')
 
 # 获取信息
-# result = html.xpath('//li/..')[0].tag  # 不能name()
+# result = html.xpath('//li/..')[0].tag  # str 不能name()
 # result = html.xpath('//li[@class="tto"]/text()')
 # result = html.xpath('//h1[contains(@class, "et_title")]/@class')
 # result = html.xpath('//h1[contains(@class, "et_title")]/a/@href')
