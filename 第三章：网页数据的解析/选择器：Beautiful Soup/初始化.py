@@ -2,7 +2,8 @@ import bs4.formatter
 from bs4 import BeautifulSoup
 
 
-# Beautiful Soup 将复杂的 HTML 文档转换成一个复杂的由 Python 对象构成的树形结构，但处理对象 的过程只包含 4 种类型的对象: Tag,
+# Beautiful Soup 将复杂的 HTML 文档转换成一个复杂的由 Python 对象构成的树形结构，
+# 但处理对象的过程只包含 4 种类型的对象: Tag,
 # NavigableString, BeautifulSoup, 和 Comment。
 
 
@@ -11,6 +12,7 @@ BeautifulSoup提供最大的兼容性， 有时把节点中间的空格和换行
 这只是一个大概的说法，实际上是一个NavigableString类型的节点。
 https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 """
+
 
 with open('../example_web.html') as f:
     soup = BeautifulSoup(f, 'lxml')
