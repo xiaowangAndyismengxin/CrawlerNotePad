@@ -1,0 +1,2 @@
+https://flukeout.github.io/
+https://frontend30.com/css-selectors-cheatsheet/
