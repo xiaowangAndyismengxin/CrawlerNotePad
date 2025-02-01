@@ -156,4 +156,3 @@ class SSR1Crawler:
             with open(dir_or_file_name, 'w', encoding='utf-8') as f:
                 json.dump(film_dict, f, ensure_ascii=False, indent=2)
             logging.info('safe successfully')
-
