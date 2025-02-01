@@ -3,6 +3,7 @@ import re
 import logging
 from urllib.parse import urljoin
 import json
+import os
 
 logging.basicConfig(
     level=logging.INFO,
@@ -123,9 +124,35 @@ class SSR1Crawler:
             logging.info(f'Parsed {url}')
         return parse_dict
 
-    def save_data(self, film_dict: dict | None = None,
-                  file_name: str = 'ssr1_data.json') -> None:
+    def save_data(self, film_dict: dict[str: dict[str: str | float | None]] | None = None,
+                  dir_or_file_name: str | None = None, auto_replace_illegal_character: bool = True,
+                  multiple_files: bool = True) -> None:
         if film_dict is None:
             film_dict = self.parse_detail()
-        with open(file_name, 'w', encoding='utf-8') as f:
-            json.dump(film_dict, f, ensure_ascii=False, indent=2)
+        if multiple_files:
+            if not dir_or_file_name:
+                dir_or_file_name = 'results_dir'
+            for film_url, film_detail in film_dict.items():
+                file_name = f'{film_detail['name']}.json'
+                if auto_replace_illegal_character:
+                    file_name = (file_name
+                                 .replace('\\', '')
+                                 .replace('/', '')
+                                 .replace(':', '')
+                                 .replace('*', '')
+                                 .replace('?', '')
+                                 .replace('<', '')
+                                 .replace('>', '')
+                                 .replace('|', ''))
+                if not os.path.exists(dir_or_file_name):
+                    os.mkdir(dir_or_file_name)
+                with open(f'{dir_or_file_name}/{file_name}', 'w', encoding='utf-8') as f:
+                    json.dump({film_url: film_detail}, f, ensure_ascii=False, indent=2)
+                logging.info(f'save {file_name} successfully')
+            logging.info('save all successfully')
+        else:
+            if not dir_or_file_name:
+                dir_or_file_name = 'result.json'
+            with open(dir_or_file_name, 'w', encoding='utf-8') as f:
+                json.dump(film_dict, f, ensure_ascii=False, indent=2)
+            logging.info('safe successfully')

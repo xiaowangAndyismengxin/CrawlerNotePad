@@ -4,4 +4,5 @@ __pycache__/
 /**/example_Mozilla_cookie.txt
 /**/bilibili_image.png
 /cnp_venv
-/**/results
+/**/results_dir/
+/**/result.json
