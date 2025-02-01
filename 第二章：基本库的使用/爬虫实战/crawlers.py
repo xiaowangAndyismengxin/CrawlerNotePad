@@ -124,22 +124,29 @@ class SSR1Crawler:
         return parse_dict
 
     def save_data(self, film_dict: dict[str: dict[str: str | float | None]] | None = None,
-                  dir_name: str = 'results', auto_replace_illegal_character: bool = True) -> None:
+                  dir_or_file_name: str = 'results', auto_replace_illegal_character: bool = True,
+                  multiple_files: bool = True) -> None:
         if film_dict is None:
             film_dict = self.parse_detail()
-        for film_url, film_detail in film_dict.items():
-            file_name = f'{film_detail['name']}.json'
-            if auto_replace_illegal_character:
-                file_name = (file_name
-                             .replace('\\', '')
-                             .replace('/', '')
-                             .replace(':', '')
-                             .replace('*', '')
-                             .replace('?', '')
-                             .replace('<', '')
-                             .replace('>', '')
-                             .replace('|', ''))
-            with open(f'{dir_name}/{file_name}', 'w', encoding='utf-8') as f:
-                json.dump({film_url: film_detail}, f, ensure_ascii=False, indent=2)
-            logging.info(f'save {file_name} successfully')
-        logging.info('save all successfully')
+        if multiple_files:
+            for film_url, film_detail in film_dict.items():
+                file_name = f'{film_detail['name']}.json'
+                if auto_replace_illegal_character:
+                    file_name = (file_name
+                                 .replace('\\', '')
+                                 .replace('/', '')
+                                 .replace(':', '')
+                                 .replace('*', '')
+                                 .replace('?', '')
+                                 .replace('<', '')
+                                 .replace('>', '')
+                                 .replace('|', ''))
+                with open(f'{dir_or_file_name}/{file_name}', 'w', encoding='utf-8') as f:
+                    json.dump({film_url: film_detail}, f, ensure_ascii=False, indent=2)
+                logging.info(f'save {file_name} successfully')
+            logging.info('save all successfully')
+        else:
+            with open(dir_or_file_name, 'w', encoding='utf-8') as f:
+                json.dump(film_dict, f, ensure_ascii=False, indent=2)
+            logging.info('safe successfully')
+
