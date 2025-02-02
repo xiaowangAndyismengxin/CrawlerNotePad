@@ -6,6 +6,7 @@ with open('../../example_web.html') as f:
 
 
 result = soup.select('.title_a.first_a')
+# result = soup.select('a:only-child')
 # result = soup.select('a')
 # result = soup.select_one('a')
 
