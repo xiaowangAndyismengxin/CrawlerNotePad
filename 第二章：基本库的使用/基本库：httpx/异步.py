@@ -3,7 +3,7 @@ import asyncio
 
 
 async def r(url):
-    async with httpx.AsyncClient(verify=False) as c:
+    async with httpx.AsyncClient() as c:
         await c.get(url)
         print('ok')
 
