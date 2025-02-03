@@ -6,3 +6,6 @@ __pycache__/
 /cnp_venv
 /**/results_dir/
 /**/result.json
+/**/data.csv
+/**/enter_experiment.txt
+/**/data.json
