@@ -1,0 +1,17 @@
+seek(cookie, whence=0, /) 是 _io.TextIOWrapper 实例的方法
+设置流的位置，并返回新的流位置。
+cookie
+零或者由 tell() 方法返回的不透明数字。
+whence
+要从其开始查找的相对位置。
+支持以下四种参数组合的操作：
+seek(0, SEEK_SET)：将流倒回到起始位置。
+seek(cookie, SEEK_SET)：恢复到之前的位置；
+“cookie” 必须是由 tell() 方法返回的数字。
+seek(0, SEEK_END)：将流快速前进到末尾。
+seek(0, SEEK_CUR)：保持当前流的位置不变。
+任何其他参数组合都是无效的，可能会引发异常。
+
+SEEK_SET: Literal[0]
+SEEK_CUR: Literal[1]
+SEEK_END: Literal[2]

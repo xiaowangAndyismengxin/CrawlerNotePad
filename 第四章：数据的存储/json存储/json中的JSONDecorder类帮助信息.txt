@@ -1,0 +1,62 @@
+class JSONDecoder(builtins.object)
+ |  JSONDecoder(*, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None)
+ |
+ |  简单的 JSON <https://json.org> 解码器
+ |
+ |  默认情况下，在解码时进行以下转换：
+ |
+ |  +---------------+-------------------+
+ |  | JSON          | Python            |
+ |  +===============+===================+
+ |  | 对象          | 字典              |
+ |  +---------------+-------------------+
+ |  | 数组          | 列表              |
+ |  +---------------+-------------------+
+ |  | 字符串        | 字符串            |
+ |  +---------------+-------------------+
+ |  | 数字（整数）  | 整数              |
+ |  +---------------+-------------------+
+ |  | 数字（实数）  | 浮点数            |
+ |  +---------------+-------------------+
+ |  | true          | True              |
+ |  +---------------+-------------------+
+ |  | false         | False             |
+ |  +---------------+-------------------+
+ |  | null          | None              |
+ |  +---------------+-------------------+
+ |
+ |  它还能将 ``NaN``、``Infinity`` 和 ``-Infinity`` 识别为相应的 ``float`` 值，这超出了 JSON 规范。
+ |
+ |  这里定义的方法：
+ |
+ |  __init__(self, *, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None)
+ |      如果指定了 ``object_hook``，它将在每个 JSON 对象解码完成后被调用，其返回值将替代解码得到的 ``dict``。这可用于提供自定义的反序列化（例如，支持 JSON - RPC 类提示）。
+ |
+ |      如果指定了 ``object_pairs_hook``，它将在每个 JSON 对象解码完成后被调用，调用时传入一个有序的键值对列表。``object_pairs_hook`` 的返回值将替代解码得到的 ``dict``。此特性可用于实现自定义解码器。
+ |      如果同时定义了 ``object_hook``，则 ``object_pairs_hook`` 优先使用。
+ |
+ |      如果指定了 ``parse_float``，它将在每个 JSON 浮点数需要解码时被调用，传入的参数是表示该浮点数的字符串。默认情况下，这等同于 float(num_str)。这可用于为 JSON 浮点数使用其他数据类型或解析器（例如 decimal.Decimal）。
+ |
+ |      如果指定了 ``parse_int``，它将在每个 JSON 整数需要解码时被调用，传入的参数是表示该整数的字符串。默认情况下，这等同于 int(num_str)。这可用于为 JSON 整数使用其他数据类型或解析器（例如 float）。
+ |
+ |      如果指定了 ``parse_constant``，它将在遇到以下字符串之一时被调用：-Infinity、Infinity、NaN。
+ |      这可用于在遇到无效的 JSON 数字时引发异常。
+ |
+ |      如果 ``strict`` 为 false（默认值为 true），则字符串中允许包含控制字符。在这种情况下，控制字符是指字符编码在 0 - 31 范围内的字符，包括 ``'\t'``（制表符）、``'\n'``、``'\r'`` 和 ``'\0'``。
+ |
+ |  decode(self, s, _w=<built-in method match of re.Pattern object at 0x0000019D9B34FED0>)
+ |      返回 ``s``（一个包含 JSON 文档的 ``str`` 实例）的 Python 表示形式。
+ |
+ |  raw_decode(self, s, idx=0)
+ |      从 ``s``（一个以 JSON 文档开头的 ``str``）中解码一个 JSON 文档，并返回一个二元组，包含 Python 表示形式以及文档在 ``s`` 中结束的索引。
+ |
+ |      这可用于从可能包含多余数据的字符串中解码 JSON 文档。
+ |
+ |  ----------------------------------------------------------------------
+ |  这里定义的数据描述符：
+ |
+ |  __dict__
+ |      实例变量的字典
+ |
+ |  __weakref__
+ |      对象的弱引用列表
