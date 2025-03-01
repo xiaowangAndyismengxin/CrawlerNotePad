@@ -27,6 +27,7 @@ for data in enumerate(json.load(open("novel_data.json", encoding='UTF-8'))):
     print('数据插入成功', end='')
     print(status)
 
+es.indices.refresh()
 print(es.search(index='news'))
 
 dsl = {

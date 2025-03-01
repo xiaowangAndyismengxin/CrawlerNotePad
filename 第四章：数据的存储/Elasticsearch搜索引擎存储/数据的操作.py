@@ -25,5 +25,6 @@ print(doc)
 
 status = es.delete(index='news', id='3')
 print(status)
+es.indices.refresh()
 result = es.search(index='news')
 print(result)
