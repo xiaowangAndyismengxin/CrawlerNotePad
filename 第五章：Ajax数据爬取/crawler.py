@@ -52,8 +52,7 @@ class ScrapeSPA1:
 
     def get_detail_api(self, data: dict | None = None) -> None | set[str]:
         if not data:
-            data = self._get_default_no_args(self.scrape_index)
-            if data is None:
+            if (data := self._get_default_no_args(self.scrape_index)) is None:
                 return None
 
         if not (results := data.get('results')):
@@ -78,8 +77,7 @@ class ScrapeSPA1:
     def scrape_detail(self, api_url: dict[str] | set[str] | None = None,
                       return_sorted: bool = True) -> None | list[dict | None]:
         if not api_url:
-            api_url = self._get_default_no_args(self.get_detail_api)
-            if api_url is None:
+            if (api_url := self._get_default_no_args(self.get_detail_api)) is None:
                 return None
 
         detail_data = []
@@ -106,8 +104,7 @@ class ScrapeSPA1:
              connect_string: str = 'mongodb://localhost:27017',
              db_name: str = 'crawler', collection_name: str = 'movies') -> None:
         if not data:
-            data = self._get_default_no_args(self.scrape_detail)
-            if data is None:
+            if (data := self._get_default_no_args(self.scrape_detail)) is None:
                 return None
 
         with pymongo.MongoClient(connect_string) as client:
