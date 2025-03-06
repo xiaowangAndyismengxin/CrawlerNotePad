@@ -40,6 +40,11 @@ class AsyncScrapeSPA5:
 
     async def scrape_api(self, url, turn_json=True, fault_list=None) -> \
             (dict | None | str):
+
+        if fault_list is None:
+            fault_list = []
+            warning(f"No fault list provided.")
+
         async with self.semaphore:
             try:
                 async with aiohttp.ClientSession(timeout=self.aiohttp_timeout) as session:
