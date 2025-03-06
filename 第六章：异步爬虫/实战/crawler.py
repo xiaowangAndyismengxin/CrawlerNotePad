@@ -5,6 +5,7 @@ from logging import info, warning, error
 import asyncio
 import motor.motor_asyncio
 import aiohttp
+import tqdm
 
 # 创建根logger
 logger = logging.getLogger()
@@ -15,17 +16,19 @@ file_handler = logging.FileHandler("ScrapeSPA5.log")
 file_handler.setFormatter(logging.Formatter('%(asctime)s --- %(levelname)s: %(message)s'))
 
 # 创建控制台处理器
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(logging.Formatter('%(asctime)s --- %(levelname)s: %(message)s'))
+# console_handler = logging.StreamHandler()
+# console_handler.setFormatter(logging.Formatter('%(asctime)s --- %(levelname)s: %(message)s'))
 
 # 添加处理器
 logger.addHandler(file_handler)
-logger.addHandler(console_handler)
+
+
+# logger.addHandler(console_handler)
 
 
 class AsyncScrapeSPA5:
     def __init__(self, page_limit: int, concurrency: int, page_size: int = 18,
-                 default_delay: int = 5):
+                 default_delay: int = 5, timeout: int = 10):
         self.page_limit = page_limit
         self.semaphore = asyncio.Semaphore(concurrency)
         self.page_size = page_size
@@ -33,12 +36,13 @@ class AsyncScrapeSPA5:
         self.index_api = ("https://spa5.scrape.center/api/book/?limit={limit}"
                           "&offset={offset}")
         self.detail_api = "https://spa5.scrape.center/api/book/{book_id}/"
+        self.aiohttp_timeout = aiohttp.ClientTimeout(total=timeout)
 
     async def scrape_api(self, url, turn_json=True, fault_list=None) -> \
             (dict | None | str):
         async with self.semaphore:
             try:
-                async with aiohttp.ClientSession() as session:
+                async with aiohttp.ClientSession(timeout=self.aiohttp_timeout) as session:
                     async with session.get(url) as resp:
                         info(f'Scraping {url}...')
 
@@ -55,13 +59,13 @@ class AsyncScrapeSPA5:
                             except json.JSONDecodeError:
                                 error("Can't decode web as json.",
                                       exc_info=True)
+                                fault_list.append(url)
                                 return None
 
                         return await resp.text()
-            except (json.JSONDecodeError, aiohttp.ClientError):
+            except (json.JSONDecodeError, aiohttp.ClientError, asyncio.TimeoutError):
                 error("Something wrong!", exc_info=True)
-                if fault_list:
-                    fault_list.append(url)
+                fault_list.append(url)
                 return None
 
     def get_index_api(self) -> list:
@@ -72,34 +76,41 @@ class AsyncScrapeSPA5:
     def get_detail_api(self, ids: list[int]) -> list:
         return [self.detail_api.format(book_id=book_id) for book_id in ids]
 
-    async def _retry_scrape(self, urls, delay=None):
-        if delay is None:
-            delay = self.default_delay
+    async def _retry_scrape(self, urls, *, tqdm_desc, delay=None):
+        with tqdm.tqdm(total=len(urls), desc=tqdm_desc) as pbar:
+            if delay is None:
+                delay = self.default_delay
 
-        fault_list = []
-        tasks = [asyncio.ensure_future(self.scrape_api(url, fault_list=fault_list))
-                 for url in urls]
+            fault_list = []
+            tasks = []
+            for url in urls:
+                task = asyncio.ensure_future(self.scrape_api(url, fault_list=fault_list))
+                task.add_done_callback(lambda t: pbar.update(1))
+                tasks.append(task)
 
-        results = await asyncio.gather(*tasks)
+            results = await asyncio.gather(*tasks)
 
         while fault_list:
             info('Sleeping~~')
             await asyncio.sleep(delay)
             info('Wake up.')
 
-            fault_list_copy = fault_list
-            fault_list.clear()
-            tasks = [asyncio.ensure_future(self.scrape_api(url, fault_list=fault_list))
-                     for url in fault_list_copy]
+            with tqdm.tqdm(total=len(fault_list), desc=tqdm_desc + ': retry') as pbar:
+                fault_list_copy = fault_list.copy()
+                fault_list.clear()
+                for url in fault_list_copy:
+                    task = asyncio.ensure_future(self.scrape_api(url, fault_list=fault_list))
+                    task.add_done_callback(lambda t: pbar.update(1))
+                    tasks.append(task)
 
-            results.extend(await asyncio.gather(*tasks))
+                results.extend(await asyncio.gather(*tasks))
 
         results = [item for item in results if item is not None]
         return results
 
     async def get_ids(self, delay=None):
 
-        results = await self._retry_scrape(self.get_index_api(), delay)
+        results = await self._retry_scrape(self.get_index_api(), tqdm_desc='Get ids', delay=delay)
         ids = [book['id']
                for result in results
                for book in result['results']]
@@ -108,7 +119,7 @@ class AsyncScrapeSPA5:
 
     async def get_detail(self, delay=None):
         ids = await self.get_ids(delay)
-        results = await self._retry_scrape(self.get_detail_api(ids), delay)
+        results = await self._retry_scrape(self.get_detail_api(ids), tqdm_desc='Get detail', delay=delay)
         return results
 
     def start_scraping(self, delay=None):
@@ -131,19 +142,19 @@ class AsyncScrapeSPA5:
 
         tasks = []
         for book in results:
-            info(f'Saving data id {book.get('id')}')
+            info(f'Add data task id {book.get('id')}')
             if book:
-                tasks.append(asyncio.ensure_future(collection.update_one(
+                task = asyncio.ensure_future(collection.update_one(
                     {'_id': book.get('id')},
                     {'$set': book},
                     upsert=True
-                )))
+                ))
+                tasks.append(task)
             else:
                 warning('Book data is empty!')
                 continue
 
-            for task in tasks:
-                task.add_done_callback(lambda t:
-                                       info(f'Save data successful.'))
-
+        if tasks:
+            info('start to save all data...')
             await gather(*tasks)
+            info('All data saved.')
