@@ -7,6 +7,7 @@ import motor.motor_asyncio
 import aiohttp
 import tqdm
 
+
 # 创建根logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -37,6 +38,7 @@ class AsyncScrapeSPA5:
                           "&offset={offset}")
         self.detail_api = "https://spa5.scrape.center/api/book/{book_id}/"
         self.aiohttp_timeout = aiohttp.ClientTimeout(total=timeout)
+        info("--- Ready for scrape. ---")
 
     async def scrape_api(self, url, turn_json=True, fault_list=None) -> \
             (dict | None | str):
@@ -96,6 +98,8 @@ class AsyncScrapeSPA5:
             results = await asyncio.gather(*tasks)
 
         while fault_list:
+            retry_tasks = []
+
             info('Sleeping~~')
             await asyncio.sleep(delay)
             info('Wake up.')
@@ -106,9 +110,9 @@ class AsyncScrapeSPA5:
                 for url in fault_list_copy:
                     task = asyncio.ensure_future(self.scrape_api(url, fault_list=fault_list))
                     task.add_done_callback(lambda t: pbar.update(1))
-                    tasks.append(task)
+                    retry_tasks.append(task)
 
-                results.extend(await asyncio.gather(*tasks))
+                results.extend(await asyncio.gather(*retry_tasks))
 
         results = [item for item in results if item is not None]
         return results
