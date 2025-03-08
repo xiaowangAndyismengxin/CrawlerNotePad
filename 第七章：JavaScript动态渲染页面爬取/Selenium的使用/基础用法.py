@@ -35,8 +35,6 @@ with webdriver.Chrome(service=service) as browser:
     # input_frame.send_keys(Keys.ENTER)
     search_button.click()
 
-    droppable_url = 'https://jqueryui.com/droppable/'
-
     # -------------------END-------------------
 
     sleep(5)
