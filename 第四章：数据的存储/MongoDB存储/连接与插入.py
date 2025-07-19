@@ -3,15 +3,11 @@ from bson.objectid import ObjectId
 
 
 # client = pymongo.MongoClient(host='localhost', port=27017)
-client = pymongo.MongoClient('mongodb://localhost:27017/')
+client = pymongo.MongoClient("mongodb://localhost:27017/")
 # db = client['game']
 db = client.game
 collection = db.players
-student = {
-    '_id': ObjectId('67a86ebd312cc3b6720d0657'),
-    'name': 'Aim',
-    'age': 34
-}
+student = {"_id": ObjectId("67a86ebd312cc3b6720d0657"), "name": "Aim", "age": 34}
 result = collection.insert_one(student)
 print(result.inserted_id)  # <class 'bson.objectid.ObjectId'>
 students = [
@@ -29,7 +25,7 @@ students = [
     {"name": "Ethan", "age": 18},
     {"name": "Harper", "age": 23},
     {"name": "Evelyn", "age": 39},
-    {"name": "Benjamin", "age": 27}
+    {"name": "Benjamin", "age": 27},
 ]
 result = collection.insert_many(students)
 print(result.inserted_ids)  # list

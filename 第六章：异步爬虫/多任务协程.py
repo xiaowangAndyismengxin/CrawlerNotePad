@@ -2,10 +2,12 @@ import asyncio
 
 
 async def get_square(num):
-    return num ** 2
+    return num**2
+
 
 def callback(t: asyncio.Task):
-    print('Result:', t.result())
+    print("Result:", t.result())
+
 
 loop = asyncio.new_event_loop()
 tasks = [asyncio.ensure_future(get_square(num), loop=loop) for num in range(10)]

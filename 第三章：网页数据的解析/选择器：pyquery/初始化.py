@@ -1,4 +1,5 @@
 from pyquery import PyQuery
+
 """https://pyquery.readthedocs.io/"""
 
 
@@ -11,6 +12,6 @@ from pyquery import PyQuery
 # 如果安装了 requests，则它将使用它。这允许您使用大多数 requests 参数：
 
 # 传文件
-doc = PyQuery(filename='../example_web.html')
+doc = PyQuery(filename="../example_web.html")
 print(doc, type(doc))
-print(doc('li'), type(doc('li')))
+print(doc("li"), type(doc("li")))

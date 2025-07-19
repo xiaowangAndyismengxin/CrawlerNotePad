@@ -1,7 +1,7 @@
 import pika
 
-QUEUE_NAME = 'crawler'
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+QUEUE_NAME = "crawler"
+connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
 channel = connection.channel()
 # channel.queue_declare(queue=QUEUE_NAME)
 
@@ -9,8 +9,7 @@ channel = connection.channel()
 while True:
     input()
     method_frame, header, body = channel.basic_get(
-        queue=QUEUE_NAME,
-        auto_ack=True  # 是否自动确认
+        queue=QUEUE_NAME, auto_ack=True  # 是否自动确认
     )
 
     print(type(method_frame))
@@ -20,4 +19,4 @@ while True:
     print(type(body))
     print(body)
     if body:
-        print(f'Get: {body}')
+        print(f"Get: {body}")

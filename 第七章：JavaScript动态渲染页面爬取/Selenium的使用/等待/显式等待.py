@@ -9,17 +9,19 @@ service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
 with webdriver.Chrome(service=service) as browser:
 
-    target_url = 'https://www.taobao.com'
+    target_url = "https://www.taobao.com"
 
     browser.get(target_url)
 
     wait = WebDriverWait(browser, 10)
 
-    input_ele = wait.until(ec.presence_of_element_located((By.ID, 'q')))
-    search_button_ele = wait.until(ec.element_to_be_clickable((By.CLASS_NAME, 'btn-search')))
+    input_ele = wait.until(ec.presence_of_element_located((By.ID, "q")))
+    search_button_ele = wait.until(
+        ec.element_to_be_clickable((By.CLASS_NAME, "btn-search"))
+    )
 
-    print('input_ele:', input_ele)
-    print('search_button_ele:', search_button_ele)
+    print("input_ele:", input_ele)
+    print("search_button_ele:", search_button_ele)
 
     # ---------------常见等待条件---------------
 

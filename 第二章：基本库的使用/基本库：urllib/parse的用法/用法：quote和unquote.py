@@ -8,5 +8,5 @@ print(url)
 
 # 复现
 query = urlparse(url).query
-q = unquote(parse_qs(query)['wd'][0])
+q = unquote(parse_qs(query)["wd"][0])
 print(q)

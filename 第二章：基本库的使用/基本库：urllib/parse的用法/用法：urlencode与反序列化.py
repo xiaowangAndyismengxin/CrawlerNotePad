@@ -1,10 +1,7 @@
 from urllib.parse import urlencode, parse_qs, parse_qsl
 
 
-params = {
-    "name": "Kimi",
-    "comment": ["Very reliable", "Good_Helper"]
-}
+params = {"name": "Kimi", "comment": ["Very reliable", "Good_Helper"]}
 url = "https://www.example.com"
 new_url = url + "?" + urlencode(params, doseq=True)
 print(new_url)

@@ -7,12 +7,12 @@ service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
 with webdriver.Chrome(service=service) as browser:
 
-    browser.get('https://www.baidu.com')
+    browser.get("https://www.baidu.com")
 
     # tab 是标签页， window 是窗口， 默认tab
     # browser.switch_to.new_window('window')
 
-    browser.execute_script('window.open()')
+    browser.execute_script("window.open()")
 
     print(browser.window_handles, type(browser.window_handles[0]))
 

@@ -7,29 +7,31 @@ import pymongo
 
 logging.basicConfig(
     filename="ScrapeSPA1.log",
-    format='%(asctime)s --- %(levelname)s: %(message)s',
-    level=logging.INFO
+    format="%(asctime)s --- %(levelname)s: %(message)s",
+    level=logging.INFO,
 )
 
 
 class ScrapeSPA1:
     def __init__(self, scrape_count: int = 100) -> None:
-        self.request_url = (f"https://spa1.scrape.center/api/movie/"
-                            f"?limit={scrape_count}&offset=0")
+        self.request_url = (
+            f"https://spa1.scrape.center/api/movie/" f"?limit={scrape_count}&offset=0"
+        )
 
-    def scrape_api(self, url, turn_json=True) -> dict | None | str:
-        logging.info(f'Scraping {url}...')
+    @staticmethod
+    def scrape_api(url, turn_json=True) -> dict | None | str:
+        logging.info(f"Scraping {url}...")
 
         try:
             resp = requests.get(url)
         except requests.RequestException:
-            logging.error(f"Something Wrong when scraping {url}.",
-                          exc_info=True)
+            logging.error(f"Something Wrong when scraping {url}.", exc_info=True)
             return None
 
         if resp.status_code != 200:
-            logging.warning(f'Bad status code {resp.status_code} when scraping '
-                            f'{url}')
+            logging.warning(
+                f"Bad status code {resp.status_code} when scraping " f"{url}"
+            )
             return None
 
         if turn_json:
@@ -44,7 +46,8 @@ class ScrapeSPA1:
     def scrape_index(self) -> dict | None:
         return self.scrape_api(self.request_url)
 
-    def _get_default_no_args(self, function_name: Callable[[], Any]) -> Any:
+    @staticmethod
+    def _get_default_no_args(function_name: Callable[[], Any]) -> Any:
         data = function_name()
         if data is None:
             logging.warning(f"Can't get anything from {function_name.__name__}.")
@@ -55,27 +58,28 @@ class ScrapeSPA1:
             if (data := self._get_default_no_args(self.scrape_index)) is None:
                 return None
 
-        if not (results := data.get('results')):
+        if not (results := data.get("results")):
             logging.warning('"results" not in detail data.')
             return None
 
         detail_api = set()
         for film in results:
-            film_id = film.get('id')
+            film_id = film.get("id")
             if film_id:
-                api_url = f'https://spa1.scrape.center/api/movie/{film_id}/'
+                api_url = f"https://spa1.scrape.center/api/movie/{film_id}/"
                 detail_api.add(api_url)
             else:
-                logging.warning(f'Get unknown id {film_id} in {film}.')
+                logging.warning(f"Get unknown id {film_id} in {film}.")
 
         if not detail_api:
-            logging.warning(f'Get no id from {results}.')
+            logging.warning(f"Get no id from {results}.")
             return None
 
         return detail_api
 
-    def scrape_detail(self, api_url: dict[str] | set[str] | None = None,
-                      return_sorted: bool = True) -> None | list[dict | None]:
+    def scrape_detail(
+        self, api_url: list[str] | set[str] | None = None, return_sorted: bool = True
+    ) -> None | list[dict | None]:
         if not api_url:
             if (api_url := self._get_default_no_args(self.get_detail_api)) is None:
                 return None
@@ -96,13 +100,17 @@ class ScrapeSPA1:
             return None
 
         if return_sorted:
-            detail_data.sort(key=lambda x: x.get('id', 0) if x else 0)
+            detail_data.sort(key=lambda x: x.get("id", 0) if x else 0)
 
         return detail_data
 
-    def save(self, data: list | None = None,
-             connect_string: str = 'mongodb://localhost:27017',
-             db_name: str = 'crawler', collection_name: str = 'movies') -> None:
+    def save(
+        self,
+        data: list | None = None,
+        connect_string: str = "mongodb://localhost:27017",
+        db_name: str = "crawler",
+        collection_name: str = "movies",
+    ) -> None:
         if not data:
             if (data := self._get_default_no_args(self.scrape_detail)) is None:
                 return None
@@ -112,9 +120,6 @@ class ScrapeSPA1:
             collection = db[collection_name]
 
             for film in data:
-                collection.update_one(
-                    {'_id': film['id']},
-                    {'$set': film},
-                    upsert=True
-                )
-                logging.info(f'Film id: {film['id']} save ok.')
+                collection.update_one({"_id": film["id"]}, {"$set": film}, upsert=True)
+                logging.info(f"Film id: {film['id']} save ok.")
+            return None

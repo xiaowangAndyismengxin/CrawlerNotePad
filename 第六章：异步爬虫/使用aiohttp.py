@@ -5,16 +5,17 @@ import time
 
 start = time.time()
 
+
 async def get_delay_5():
     try:
-        url = 'https://www.httpbin.org/delay/5'
+        url = "https://www.httpbin.org/delay/5"
         time_out = aiohttp.ClientTimeout(total=100)
         async with aiohttp.ClientSession(timeout=time_out) as session:
             response = await session.get(url)
-            print(url + ':', response)
+            print(url + ":", response)
         return response
     except asyncio.TimeoutError:
-        print('Time out!')
+        print("Time out!")
 
 
 loop = asyncio.new_event_loop()
@@ -24,4 +25,4 @@ loop.close()
 
 end = time.time()
 spend_time = end - start
-print('time:', spend_time)
+print("time:", spend_time)

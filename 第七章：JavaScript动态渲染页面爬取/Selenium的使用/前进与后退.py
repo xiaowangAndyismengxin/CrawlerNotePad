@@ -8,11 +8,11 @@ service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 with webdriver.Chrome(service=service) as browser:
 
     urls = [
-        'https://www.htmlandcssbook.com/code-samples/chapter-01',
-        'https://www.htmlandcssbook.com/code-samples/chapter-02',
-        'https://www.htmlandcssbook.com/code-samples/chapter-03',
-        'https://www.htmlandcssbook.com/code-samples/chapter-04',
-        'https://www.htmlandcssbook.com/code-samples/chapter-05'
+        "https://www.htmlandcssbook.com/code-samples/chapter-01",
+        "https://www.htmlandcssbook.com/code-samples/chapter-02",
+        "https://www.htmlandcssbook.com/code-samples/chapter-03",
+        "https://www.htmlandcssbook.com/code-samples/chapter-04",
+        "https://www.htmlandcssbook.com/code-samples/chapter-05",
     ]
 
     for url in urls:

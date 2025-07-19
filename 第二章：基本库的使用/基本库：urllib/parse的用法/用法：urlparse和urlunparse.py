@@ -11,6 +11,13 @@ print(result[-1])
 
 # 复现
 # parse_list = [*result]
-parse_list = [result.scheme, result.netloc, result.path, result.params, result.query, result.fragment]
+parse_list = [
+    result.scheme,
+    result.netloc,
+    result.path,
+    result.params,
+    result.query,
+    result.fragment,
+]
 result2 = urlunparse(parse_list)
 print(result2)

@@ -14,10 +14,10 @@ https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 """
 
 
-with open('../example_web.html') as f:
-    soup = BeautifulSoup(f, 'lxml')
+with open("../example_web.html") as f:
+    soup = BeautifulSoup(f, "lxml")
 print(soup.prettify(formatter=bs4.formatter.HTMLFormatter(indent=4)))
-print(soup.ul.get_text('|', strip=True))  # str
+print(soup.ul.get_text("|", strip=True))  # str
 # 若想强制将所有属性当做多值进行解析，可以在 BeautifulSoup 构造方法中设置 multi_valued_attributes=None 参数
 # 如果以 XML 方式解析文档，则没有多值属性,但是，可以通过配置 multi_valued_attributes 参数来修改
 # class_is_multi = {'*': 'class'}

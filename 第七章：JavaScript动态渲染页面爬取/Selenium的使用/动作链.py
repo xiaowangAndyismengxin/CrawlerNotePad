@@ -10,15 +10,14 @@ service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
 with webdriver.Chrome(service=service) as browser:
 
-    browser.get('https://jqueryui.com/droppable/')
+    browser.get("https://jqueryui.com/droppable/")
 
     # 切换到iframe
-    browser.switch_to.frame(browser.find_element(By.XPATH,
-                                                 '//*[@id="content"]/iframe'))
+    browser.switch_to.frame(browser.find_element(By.XPATH, '//*[@id="content"]/iframe'))
 
     # 定位拖拽元素和目标元素
-    draggable = browser.find_element(By.ID, 'draggable')
-    droppable = browser.find_element(By.ID, 'droppable')
+    draggable = browser.find_element(By.ID, "draggable")
+    droppable = browser.find_element(By.ID, "droppable")
 
     # 拖拽不能拖拽的元素，没用
     # draggable = browser.find_element(By.XPATH, '//*[@id="content"]/div[1]/ul/li[2]')

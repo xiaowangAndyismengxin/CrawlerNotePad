@@ -1,11 +1,11 @@
 from bs4 import BeautifulSoup
 
 
-with open('../../example_web.html') as f:
-    soup = BeautifulSoup(f, 'lxml')
+with open("../../example_web.html") as f:
+    soup = BeautifulSoup(f, "lxml")
 
 
-result = soup.select('.title_a.first_a')
+result = soup.select(".title_a.first_a")
 # result = soup.select('a:only-child')
 # result = soup.select('a')
 # result = soup.select_one('a')
@@ -27,4 +27,4 @@ result = soup.select('.title_a.first_a')
 # result = soup.css.escape('.')
 
 
-print('result: ', result)
+print("result: ", result)

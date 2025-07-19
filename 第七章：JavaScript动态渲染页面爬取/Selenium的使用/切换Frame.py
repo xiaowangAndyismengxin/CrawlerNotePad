@@ -7,18 +7,18 @@ from time import sleep
 
 service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
-with (webdriver.Chrome(service=service) as browser):
+with webdriver.Chrome(service=service) as browser:
 
-    url = 'https://www.w3school.com.cn/tiy/t.asp?f=tag_iframe_name'
+    url = "https://www.w3school.com.cn/tiy/t.asp?f=tag_iframe_name"
 
     browser.get(url)
 
     # 切换到frame
-    browser.switch_to.frame('iframeResult')
-    browser.switch_to.frame('iframe_a')
+    browser.switch_to.frame("iframeResult")
+    browser.switch_to.frame("iframe_a")
 
-    in_frame_a_xpath_string = '/html/body'
-    in_fame_a_parent_xpath_string = '/html/body/h1'
+    in_frame_a_xpath_string = "/html/body"
+    in_fame_a_parent_xpath_string = "/html/body/h1"
 
     # 定位元素
     in_frame_a = browser.find_element(By.XPATH, in_frame_a_xpath_string)
@@ -43,9 +43,9 @@ with (webdriver.Chrome(service=service) as browser):
         in_frame_a = browser.find_element(By.XPATH, in_frame_a_xpath_string)
         # 输出文本
         print(in_frame_a.text)
-        print('Get wrong element in wrong frame.')
+        print("Get wrong element in wrong frame.")
 
     except NoSuchElementException:
-        print('Can not find element in wrong frame.')
+        print("Can not find element in wrong frame.")
 
     sleep(5)

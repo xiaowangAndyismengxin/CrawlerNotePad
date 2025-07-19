@@ -9,18 +9,18 @@ service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
 with webdriver.Chrome(service=service) as browser:
     browser.implicitly_wait(5)
-    target_url = 'https://spa5.scrape.center/'
+    target_url = "https://spa5.scrape.center/"
 
     browser.get(target_url)
 
     try:
 
         start_time = time()
-        element = browser.find_element(By.CSS_SELECTOR, '.logo-image')
+        element = browser.find_element(By.CSS_SELECTOR, ".logo-image")
         print(element)
         end_time = time()
-        print(f'元素查询耗时：{end_time - start_time}')
+        print(f"元素查询耗时：{end_time - start_time}")
     except TimeoutException:
-        print('未找到元素')
+        print("未找到元素")
 
     sleep(5)

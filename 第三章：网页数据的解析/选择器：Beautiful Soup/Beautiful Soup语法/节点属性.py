@@ -1,12 +1,12 @@
 from bs4 import BeautifulSoup
 
 
-with open('../../example_web.html') as f:
-    soup = BeautifulSoup(f, 'lxml')
+with open("../../example_web.html") as f:
+    soup = BeautifulSoup(f, "lxml")
 
 
 # print(soup.ul.li.next_sibling.next_sibling.name)
-result = soup.a.attrs, soup.a.attrs['class'], soup.a['class'], type(soup.a.attrs)
+result = soup.a.attrs, soup.a.attrs["class"], soup.a["class"], type(soup.a.attrs)
 # result = soup.ul.li.string
 
 # 如果 tag 中包含多个字符串 ,可以使用 .strings 来循环获取
@@ -74,4 +74,4 @@ result = soup.a.attrs, soup.a.attrs['class'], soup.a['class'], type(soup.a.attrs
 #     print(ele)
 
 
-print('result: ', result)
+print("result: ", result)

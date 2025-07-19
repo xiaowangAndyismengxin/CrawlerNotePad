@@ -3,26 +3,32 @@ from bs4 import BeautifulSoup
 import re
 
 
-with open('../../example_web.html') as f:
-    soup = BeautifulSoup(f, 'lxml')
+with open("../../example_web.html") as f:
+    soup = BeautifulSoup(f, "lxml")
 
 
-result = soup.find_all('b'), type(soup.find_all('b'))
+result = soup.find_all("b"), type(soup.find_all("b"))
 # result = [repr(str(tag))[:100] + '...' for tag in soup.find_all(['body', 'b'])]
 # 用True匹配任何值
 # for tag in soup.find_all(True):
 #     print(tag.name)
 # result = soup.find_all(re.compile('ody'))此处正则是用search()搜索的
 
+
 # 函数
 # 如果没有合适过滤器，那么还可以定义一个函数方法，参数是一个元素 [4],
 # 如果这个方法返回 True 表示当前元素匹配并且被找到，如果不是则反回 False。
 def has_class_and_id(tag: bs4.Tag) -> bool:
-    return tag.has_attr('class') and tag.has_attr('id')
+    return tag.has_attr("class") and tag.has_attr("id")
+
+
 # result = soup.find_all(has_class_and_id)
 
+
 def href_include_bing(href: str | None) -> bool:
-    return bool(href and re.compile('bing').search(href))
+    return bool(href and re.compile("bing").search(href))
+
+
 # result = soup.find_all(href=href_include_bing)
 #
 # 如果动态参数中出现未能识别的参数名，
@@ -54,4 +60,4 @@ def href_include_bing(href: str | None) -> bool:
 # soup.find_previous()
 
 
-print('result: ', result)
+print("result: ", result)

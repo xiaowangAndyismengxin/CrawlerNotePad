@@ -8,7 +8,7 @@ from selenium.common.exceptions import NoAlertPresentException
 service = Service(executable_path="D:/chromedriver-win64/chromedriver.exe")
 
 with webdriver.Chrome(service=service) as browser:
-    url = 'https://www.bilibili.com'
+    url = "https://www.bilibili.com"
     browser.get(url)
 
     # 执行JavaScript代码
@@ -23,12 +23,12 @@ with webdriver.Chrome(service=service) as browser:
         pass
 
     # 滚动页面到页面底部
-    browser.execute_script('window.scrollTo(0, document.body.scrollHeight)')
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
     # 修改页面标题
     browser.execute_script('document.title = "New Title"')
 
     # 获取页面标题
-    title = browser.execute_script('return document.title')
+    title = browser.execute_script("return document.title")
     print(title)
 
     sleep(5)

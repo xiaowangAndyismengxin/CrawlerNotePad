@@ -1,12 +1,12 @@
 from pyquery import PyQuery
 
 
-doc = PyQuery(filename='../example_web.html')
+doc = PyQuery(filename="../example_web.html")
 
 
 # 查找节点
 # 子孙节点
-result = doc('.toppings').find('li')
+result = doc(".toppings").find("li")
 # 子节点
 # result = doc('.toppings').children()
 # 父节点
@@ -44,4 +44,4 @@ result = doc('.toppings').find('li')
 # print(element_sth.remove())
 
 
-print('result: ', result)
+print("result: ", result)
